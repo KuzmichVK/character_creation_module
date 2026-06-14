@@ -1,0 +1,24 @@
+[project]
+name = "dev-py-11-character-creation-module"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "flake8>=7.3.0",
+    "pytest>=9.1.0",
+    "ruff>=0.15.17",
+]
+
+[tool.ruff]
+line-length = 79
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ANN"]
+
+[tool.ruff.format]
+quote-style = "double"
