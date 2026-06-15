@@ -12,24 +12,24 @@ class Character:
     SPECIAL_BUFF = 15
     SPECIAL_SKILL = "Удача"
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self.name = name
 
-    def attack(self):
+    def attack(self) -> str:
         value_attack = DEFAULT_ATTACK + randint(*self.RANGE_VALUE_ATTACK)
         return f"{self.name} нанёс противнику урон, равный {value_attack}"
 
-    def defence(self):
+    def defence(self) -> str:
         value_defence = DEFAULT_DEFENCE + randint(*self.RANGE_VALUE_DEFENCE)
         return f"{self.name} блокировал {value_defence} ед. урона"
 
-    def special(self):
+    def special(self) -> str:
         return (
             f"{self.name} применил специальное умение "
             f'"{self.SPECIAL_SKILL} {self.SPECIAL_BUFF}"'
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.__class__.__name__} - {self.BRIEF_DESC_CHAR_CLASS}."
 
 
@@ -63,7 +63,7 @@ class Healer(Character):
     SPECIAL_SKILL = "Защита"
 
 
-def start_training(character):
+def start_training(character: Character) -> str:
     """Принимает на вход имя и класс персонажа.
 
     Возвращает сообщения о результатах цикла тренировки персонажа.
@@ -95,24 +95,29 @@ def choice_char_class(char_name: str) -> Character:
     классом персонажа.
     """
     game_classes = {"warrior": Warrior, "mage": Mage, "healer": Healer}
-    approve_choice: str = None
+    approve_choice: str = ""
+    char_class: Character | None = None
     while approve_choice != "y":
         selected_class = input(
             "Введи название персонажа, "
             "за которого хочешь играть: Воитель — warrior, "
             "Маг — mage, Лекарь — healer: "
         )
-        char_class: Character = game_classes[selected_class](char_name)
+        char_class = game_classes[selected_class](char_name)
         print(char_class)
         approve_choice = input(
             "Нажми (Y), чтобы подтвердить выбор, "
             "или любую другую кнопку, "
             "чтобы выбрать другого персонажа "
         ).lower()
+    # Цикл всегда выполняется хотя бы раз (approve_choice = '' != 'y'),
+    # поэтому char_class гарантированно задан; assert снимает у анализатора
+    # предупреждение "возможно не привязан" и сужает тип к Character.
+    assert char_class is not None
     return char_class
 
 
-def main():
+def main() -> None:
     print("Приветствую тебя, искатель приключений!")
     print("Прежде чем начать игру...")
     char_name = input("...назови себя: ")
